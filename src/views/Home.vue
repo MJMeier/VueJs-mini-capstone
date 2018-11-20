@@ -1,18 +1,83 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="home container">
+    <div class="jumbotron">
+      <h1 class="display-4">Trudy's!!</h1>
+      <p class="lead">Best pepper relish ever!</p>
+      <hr class="my-4">
+    </div>
+    <h1>Add new Product</h1>
+    Name: <input v-model="newProductName" type="text">
+    Price: <input v-model="newProductPrice" type="text">
+    Description: <input v-model="newProductDescription" type="text">
+    Supplier ID: <input v-model="newProductSupplierId" type="text">
+     <button v-on:click="createProduct()" class="btn btn-primary">Create</button>
+
+    <div class="row">
+      <div v-for="product in products" class="col-md-4 mb-2">
+        <div class="card">
+          <img class="card-img-top" v-bind:src="product.images[0]">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name}}</h5>
+            <p class="card-text">{{product.description}}</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
+<style>
+
+</style>
+
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+  var axios = require("axios");
 
 export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
+    data: function() {
+      return {
+        message: "Welcome to Vue.js!",
+        products: [],
+        newProductName: "",
+        newProductPrice: "",
+        newProductDescription: "",
+        newProductSupplierId: ""
+      };
+    },
+    created: function() {
+      axios.get("http://localhost:3000/api/products").then(
+        function(response) {
+          console.log(response.data);
+          this.products = response.data;
+        }.bind(this)
+      );
+    },
+    methods: {
+      createProduct: function() {
+        console.log("createProduct");
+        var params = {
+          name: this.newProductName,
+          price: this.newProductPrice,
+          description: this.newProductDescription,
+          supplier_id: this.newProductSupplierId
+        };
+        axios.post("http://localhost:3000/api/products", params).then(function(response) {
+          console.log(response);
+          this.products.push(response.data);
+          this.newProductName = "";
+          this.newProductPrice = "";
+          this.newProductDescription = "";
+          this.newProductSupplierId = "";
+        }.bind(this)
+        )
+          .catch(
+            function(error) {
+              console.log(error.response);
+            }.bind(this)
+          );
+      },
+    },
+    computed: {}
+  };
 </script>
