@@ -12,14 +12,17 @@
     Supplier ID: <input v-model="newProductSupplierId" type="text">
      <button v-on:click="createProduct()" class="btn btn-primary">Create</button>
 
+    <h1>Search Filter</h1>
+    <input type="text" v-model="searchFilter">
+
     <div class="row">
-      <div v-for="product in products" class="col-md-4 mb-2">
+      <div v-for="product in filterBy(products, searchFilter, 'name')" class="col-md-4 mb-2">
         <div class="card">
           <img class="card-img-top" v-bind:src="product.images[0]">
           <div class="card-body">
             <h5 class="card-title">{{ product.name}}</h5>
             <p class="card-text">{{product.description}}</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            <a v-bind:href="'/#/products/${product.id}'" class="btn btn-primary">View Product</a>
           </div>
         </div>
       </div>
@@ -42,7 +45,8 @@ export default {
         newProductName: "",
         newProductPrice: "",
         newProductDescription: "",
-        newProductSupplierId: ""
+        newProductSupplierId: "",
+        searchFilter: "",
       };
     },
     created: function() {
