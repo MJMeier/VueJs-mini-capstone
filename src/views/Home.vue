@@ -23,8 +23,8 @@
          <option v-for="product in products">{{ product.names }}</option>
        </datalist>
 
-    <div class="row">
-      <div v-for="product in orderBy(filterBy(products, searchFilter, 'name'), sortAttribute, sortOrder)" class="col-md-4 mb-2">
+    <div class="row" is="transition-group" name="fade">
+      <div v-for="product in orderBy(filterBy(products, searchFilter, 'name'), sortAttribute, sortOrder)" class="col-md-4 mb-2" v-bind:key="product.id">
         <div class="card">
           <img class="card-img-top" v-bind:src="product.images[0]">
           <div class="card-body">
@@ -39,7 +39,37 @@
 </template>
 
 <style>
+/* Vue.js fade */
+ .fade-enter-active, .fade-leave-active {
+   transition: opacity .5s
+ }
+ .fade-enter, .fade-leave-to {
+   opacity: 0
+ }
 
+ /* Vue.js slide-right */
+ .slide-right-enter-active {
+   transition: all .3s ease;
+ }
+ .slide-right-leave-active {
+   transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+ }
+ .slide-right-enter, .slide-right-leave-to {
+   transform: translateX(10px);
+   opacity: 0;
+ }
+
+ /* Vue.js slide-left */
+ .slide-left-enter-active {
+   transition: all .3s ease;
+ }
+ .slide-left-leave-active {
+   transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+ }
+ .slide-left-enter, .slide-left-leave-to {
+   transform: translateX(-10px);
+   opacity: 0;
+ }
 </style>
 
 <script>
