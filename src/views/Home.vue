@@ -13,8 +13,8 @@
      <button v-on:click="createProduct()" class="btn btn-primary">Create</button>
 
       <div>
-       <button v-on:click="sortAttribute = 'name'" class="btn btn-secondary">Sort by name</button>
-       <button v-on:click="sortAttribute = 'price'" class="btn btn-secondary">Sort by price</button>
+       <button v-on:click="setSortAttribute('name')" class="btn btn-secondary">Sort by name</button>
+       <button v-on:click="setSortAttribute('price')" class="btn btn-secondary">Sort by price</button>
       </div>
 
     <h1>Search Filter</h1>
@@ -24,7 +24,7 @@
        </datalist>
 
     <div class="row">
-      <div v-for="product in orderBy(filterBy(products, searchFilter, 'name'), sortAttribute)" class="col-md-4 mb-2">
+      <div v-for="product in orderBy(filterBy(products, searchFilter, 'name'), sortAttribute, sortOrder)" class="col-md-4 mb-2">
         <div class="card">
           <img class="card-img-top" v-bind:src="product.images[0]">
           <div class="card-body">
@@ -55,7 +55,8 @@ export default {
         newProductDescription: "",
         newProductSupplierId: "",
         searchFilter: "",
-        sortAttribute: "title"
+        sortAttribute: "name",
+        sortOrder: 1
       };
     },
     created: function() {
@@ -67,6 +68,16 @@ export default {
       );
     },
     methods: {
+
+      setSortAttribute: function(inputAttribute) {
+        if (this.sortOrder === 1) {
+          this.sortOrder = -1;
+        } else {
+          this.sortOrder = 1;
+        }
+        this.sortAttribute = inputAttribute;
+      },
+
       createProduct: function() {
         console.log("createProduct");
         var params = {
